@@ -28,6 +28,17 @@
         .name-cell {
             display: inline-block;
         }
+        .blue-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .blue-button:hover {
+            background-color: #0056b3;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -65,7 +76,9 @@
 <body>
     <h1>Random Name Generator</h1>
     <textarea id="nameInput" rows="10" cols="30" placeholder="Enter names, separated by commas"></textarea><br><br>
-    <button onclick="generateNames()">Generate Random Names</button>
+    <button class="blue-button" onclick="generateNames()">Generate Random Names</button>
+    <button class="blue-button" onclick="setPreset('presetA')">Preset: Example</button>
+    <button class="blue-button" onclick="setPreset('presetB')">Preset: 9D</button>
     <table id="resultTable">
         <tbody id="nameList"></tbody>
     </table>
@@ -73,12 +86,17 @@
     <div id="licenseModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <p><a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a></p>
+            <p>This site is licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</p>
         </div>
     </div>
     <p><a href="javascript:void(0)" onclick="openModal()">This site is licensed under the MIT License</a></p>
 
     <script>
+        const presets = {
+            presetA: "A, B, C, D, E, F, G",
+            presetB: "H, I, J, K, L, M, N"
+        };
+
         function generateNames() {
             const input = document.getElementById("nameInput").value;
             const names = input.split(",").map(name => name.trim()).filter(name => name);
@@ -89,7 +107,12 @@
 
             const shuffledNames = names.sort(() => 0.5 - Math.random());
             const selectedNames = shuffledNames.slice(0, 4);
-            const roles = ["Chairperson", "Timekeeper", "Secretary", "Rulekeeper"];
+            const roles = [
+                "Chairperson/Vorsitzende/r", 
+                "Timekeeper/Zeitwächter/in", 
+                "Secretary/Protokollant/in", 
+                "Rules Monitor/Regelwächter/in"
+            ];
 
             const nameList = document.getElementById("nameList");
             nameList.innerHTML = "";
@@ -112,6 +135,13 @@
 
                 nameList.appendChild(row);
             });
+        }
+
+        function setPreset(presetName) {
+            const preset = presets[presetName];
+            if (preset) {
+                document.getElementById("nameInput").value = preset;
+            }
         }
 
         function openModal() {
